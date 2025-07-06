@@ -57,59 +57,23 @@ const AboutUs = () => {
         </div>
       </div>
 
-      {/* Team Section */}
+      {/* CEO Section */}
       <div className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Our Team</h2>
-          <div className="flex flex-col items-center mb-12">
-            <div className="w-32 h-32 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-              <div className="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center">
-                <span className="text-white text-4xl font-bold">G</span>
-              </div>
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Our Leadership</h2>
+          <div className="flex flex-col items-center">
+            <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-blue-100 mb-6">
+              <img 
+                src="/images/ceo.jpg" 
+                alt="Srikar CJ"
+                className="w-full h-full object-cover"
+              />
             </div>
-            <p className="text-gray-600 text-center max-w-2xl">
-              Meet the brilliant minds behind GATE Scholar Hub, dedicated to helping you achieve your engineering dreams.
+            <h3 className="text-2xl font-bold text-gray-900">Srikar CJ</h3>
+            <p className="text-blue-600 font-medium mb-4">CEO & Founder</p>
+            <p className="text-gray-600 text-center max-w-2xl mb-8">
+              Visionary leader and driving force behind GATE Scholar Hub, dedicated to transforming engineering education in India.
             </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {[
-              {
-                name: "Aravind",
-                role: "Frontend Developer",
-                description: "Crafts beautiful and responsive user interfaces",
-                image: "https://randomuser.me/api/portraits/men/32.jpg"
-              },
-              {
-                name: "Vinay",
-                role: "Backend Developer",
-                description: "Builds robust and scalable server-side applications",
-                image: "https://randomuser.me/api/portraits/men/44.jpg"
-              },
-              {
-                name: "Srikar",
-                role: "Full Stack Developer",
-                description: "Bridges the gap between frontend and backend systems",
-                image: "https://randomuser.me/api/portraits/men/22.jpg"
-              }
-            ].map((member, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                <div className="w-32 h-32 rounded-full mx-auto mb-4 overflow-hidden border-4 border-blue-100">
-                  <img 
-                    src={member.image} 
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.onerror = null;
-                      target.src = 'https://ui-avatars.com/api/?name=' + member.name.replace(' ', '+') + '&background=random';
-                    }}
-                  />
-                </div>
-                <h3 className="text-xl font-semibold text-center">{member.name}</h3>
-                <p className="text-blue-600 text-center mb-3">{member.role}</p>
-                <p className="text-gray-600 text-center">{member.description}</p>
-              </div>
-            ))}
           </div>
         </div>
       </div>

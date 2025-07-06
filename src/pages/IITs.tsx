@@ -6,14 +6,48 @@ import { Input } from '@/components/ui/input';
 import CollegeCard from '@/components/CollegeCard';
 import { getIITs } from '@/data/collegesData';
 import { type College } from '@/data/collegesData';
+import CollegeComparison from '@/components/CollegeComparison';
 
 const IITs = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('ranking');
   const [selectedColleges, setSelectedColleges] = useState<string[]>([]);
+  const [showComparison, setShowComparison] = useState(false);
 
   const iits = getIITs();
+  
+  const selectedCollegeData = iits.filter(college => 
+    selectedColleges.includes(college.id)
+  );
+  
+  if (showComparison && selectedCollegeData.length > 0) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4">
+              <Button 
+                onClick={() => setShowComparison(false)}
+                variant="outline"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to IITs
+              </Button>
+              <h1 className="text-3xl font-bold">IITs Comparison</h1>
+            </div>
+            <Button 
+              onClick={() => setSelectedColleges([])}
+              variant="outline"
+            >
+              Clear Selection
+            </Button>
+          </div>
+          <CollegeComparison colleges={selectedCollegeData} />
+        </div>
+      </div>
+    );
+  }
   
   const filteredColleges = iits
     .filter(college =>
@@ -125,21 +159,34 @@ const IITs = () => {
 
         {/* Comparison Bar */}
         {selectedColleges.length > 0 && (
-          <div className="bg-blue-600 text-white rounded-lg p-4 mb-6 flex items-center justify-between">
-            <div>
-              <span className="font-medium">{selectedColleges.length} IIT(s) selected for comparison</span>
-              {selectedColleges.length >= 2 && (
-                <span className="ml-2 text-blue-200">Ready to compare!</span>
-              )}
+          <div className="fixed bottom-0 left-0 right-0 sm:bottom-4 sm:left-1/2 sm:right-auto sm:max-w-max sm:rounded-lg sm:transform sm:-translate-x-1/2 bg-blue-600 text-white p-3 sm:p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between shadow-2xl z-50 gap-2 sm:gap-4">
+            <div className="text-center sm:text-left mb-2 sm:mb-0">
+              <div className="font-medium text-sm sm:text-base">
+                {selectedColleges.length} IIT{selectedColleges.length !== 1 ? 's' : ''} selected
+              </div>
+              <p className="text-xs sm:text-sm text-blue-100">
+                {selectedColleges.length < 2 
+                  ? `Select ${2 - selectedColleges.length} more to compare` 
+                  : 'Ready to compare!'}
+              </p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <Button 
-                onClick={() => setSelectedColleges([])}
-                variant="outline"
+                variant="outline" 
                 size="sm"
-                className="border-white text-white hover:bg-white hover:text-blue-600"
+                className="bg-white text-blue-600 hover:bg-blue-50 w-full sm:w-auto"
+                onClick={() => setShowComparison(selectedColleges.length >= 2)}
+                disabled={selectedColleges.length < 2}
               >
-                Clear
+                Compare ({selectedColleges.length}/3)
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className="text-white hover:bg-blue-500 w-full sm:w-auto"
+                onClick={() => setSelectedColleges([])}
+              >
+                Clear All
               </Button>
             </div>
           </div>
@@ -158,7 +205,7 @@ const IITs = () => {
             ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
             : 'grid-cols-1'
         }`}>
-          {filteredColleges.map(college => (
+          {filteredColleges.map((college) => (
             <CollegeCard 
               key={college.id} 
               college={college} 

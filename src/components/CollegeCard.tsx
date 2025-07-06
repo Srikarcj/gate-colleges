@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, MapPin, Users, TrendingUp, BookOpen, Award, Heart, Share2, Eye, Plus, Check, IndianRupee } from 'lucide-react';
+import { Star, MapPin, Users, TrendingUp, BookOpen, Award, Heart, Share2, Eye, Plus, Check, IndianRupee, HeartOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,20 +8,40 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { type College } from '@/data/collegesData';
 import FeeStructureModal from './FeeStructureModal';
+import { useFavorites } from '@/contexts/FavoritesContext';
 
 interface CollegeCardProps {
   college: College;
   onCompareToggle?: (college: College) => void;
   isInCompareList?: boolean;
   viewMode: 'grid' | 'list';
+  hideFavoriteButton?: boolean;
 }
 
 const CollegeCard: React.FC<CollegeCardProps> = ({ 
   college, 
   onCompareToggle, 
   isInCompareList = false, 
-  viewMode 
+  viewMode,
+  hideFavoriteButton = false
 }) => {
+  const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
+  const [isFavorited, setIsFavorited] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsFavorited(isFavorite(college.id));
+  }, [college.id, isFavorite]);
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isFavorited) {
+      removeFromFavorites(college.id);
+    } else {
+      addToFavorites(college.id);
+    }
+    setIsFavorited(!isFavorited);
+  };
   const getRatingColor = (rating: number) => {
     if (rating >= 4.5) return 'text-green-600';
     if (rating >= 4.0) return 'text-blue-600';
@@ -228,9 +248,16 @@ const CollegeCard: React.FC<CollegeCardProps> = ({
           </Badge>
         </div>
         <div className="absolute top-4 right-4 flex gap-2">
-          <Button variant="secondary" size="sm" className="h-8 w-8 p-0 bg-white/20 border-white/30 hover:bg-white/30">
-            <Heart className="w-4 h-4 text-white" />
-          </Button>
+          {!hideFavoriteButton && (
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              className={`h-8 w-8 p-0 ${isFavorited ? 'bg-red-500/20 border-red-400/30 hover:bg-red-500/30' : 'bg-white/20 border-white/30 hover:bg-white/30'}`}
+              onClick={handleFavoriteClick}
+            >
+              <Heart className={`w-4 h-4 ${isFavorited ? 'text-red-500 fill-current' : 'text-white'}`} />
+            </Button>
+          )}
           <Button variant="secondary" size="sm" className="h-8 w-8 p-0 bg-white/20 border-white/30 hover:bg-white/30">
             <Share2 className="w-4 h-4 text-white" />
           </Button>

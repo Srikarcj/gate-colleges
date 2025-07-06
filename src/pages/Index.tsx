@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, Users, TrendingUp, Award, ArrowRight, Star, Target, Zap } from 'lucide-react';
+import { BookOpen, Users, TrendingUp, Award, ArrowRight, Star, Target, Zap, Heart } from 'lucide-react';
 
 const Index = () => {
   const handleGatePrepClick = () => {
@@ -11,9 +11,9 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <>
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white pt-16 pb-20 -mt-16">
         <div className="container mx-auto px-4 py-20">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
@@ -144,7 +144,7 @@ const Index = () => {
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
 };
 
